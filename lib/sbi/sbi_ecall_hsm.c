@@ -22,13 +22,14 @@ static int sbi_ecall_hsm_handler(unsigned long extid, unsigned long funcid,
 {
 	int ret = 0;
 	struct sbi_scratch *scratch = sbi_scratch_thishart_ptr();
-	ulong smode = (csr_read(CSR_MSTATUS) & MSTATUS_MPP) >>
+	ulong src_mode = (csr_read(CSR_MSTATUS) & MSTATUS_MPP) >>
 			MSTATUS_MPP_SHIFT;
 
 	switch (funcid) {
 	case SBI_EXT_HSM_HART_START:
+		/* start the hart in the same mode as the call origin */
 		ret = sbi_hsm_hart_start(scratch, sbi_domain_thishart_ptr(),
-					 regs->a0, regs->a1, smode, regs->a2);
+					 regs->a0, regs->a1, src_mode, regs->a2);
 		break;
 	case SBI_EXT_HSM_HART_STOP:
 		ret = sbi_hsm_hart_stop(scratch, true);
@@ -38,8 +39,9 @@ static int sbi_ecall_hsm_handler(unsigned long extid, unsigned long funcid,
 					     regs->a0);
 		break;
 	case SBI_EXT_HSM_HART_SUSPEND:
+		/* resume the hart in the same mode as the call origin */
 		ret = sbi_hsm_hart_suspend(scratch, regs->a0, regs->a1,
-					   smode, regs->a2);
+					   src_mode, regs->a2);
 		break;
 	default:
 		ret = SBI_ENOTSUPP;

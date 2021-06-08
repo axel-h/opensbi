@@ -298,7 +298,7 @@ fail_exit:
 
 int sbi_hsm_hart_start(struct sbi_scratch *scratch,
 		       const struct sbi_domain *dom,
-		       u32 hartid, ulong saddr, ulong smode, ulong arg1)
+		       u32 hartid, ulong start_addr, ulong start_mode, ulong priv)
 {
 	unsigned long init_count, entry_count;
 	unsigned int hstate;
@@ -307,11 +307,11 @@ int sbi_hsm_hart_start(struct sbi_scratch *scratch,
 	int rc;
 
 	/* For now, we only allow start mode to be S-mode or U-mode. */
-	if (smode != PRV_S && smode != PRV_U)
+	if (start_mode != PRV_S && start_mode != PRV_U)
 		return SBI_EINVAL;
 	if (dom && !sbi_domain_is_assigned_hart(dom, hartid))
 		return SBI_EINVAL;
-	if (dom && !sbi_domain_check_addr(dom, saddr, smode,
+	if (dom && !sbi_domain_check_addr(dom, start_addr, start_mode,
 					  SBI_DOMAIN_EXECUTE))
 		return SBI_EINVALID_ADDR;
 
@@ -326,9 +326,9 @@ int sbi_hsm_hart_start(struct sbi_scratch *scratch,
 	init_count = sbi_init_count(hartid);
 	entry_count = sbi_entry_count(hartid);
 
-	rscratch->next_arg1 = arg1;
-	rscratch->next_addr = saddr;
-	rscratch->next_mode = smode;
+	rscratch->next_arg1 = priv;
+	rscratch->next_addr = start_addr;
+	rscratch->next_mode = start_mode;
 
 	/*
 	 * atomic_cmpxchg() is an implicit barrier. It makes sure that
