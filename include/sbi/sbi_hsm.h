@@ -2,6 +2,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  *
  * Copyright (c) 2020 Western Digital Corporation or its affiliates.
+ * Copyright (c) 2021 Axel Heider
  *
  * Authors:
  *   Atish Patra <atish.patra@wdc.com>
@@ -79,5 +80,8 @@ int sbi_hsm_hart_interruptible_mask(const struct sbi_domain *dom,
 void __sbi_hsm_suspend_non_ret_save(struct sbi_scratch *scratch);
 void __noreturn sbi_hsm_hart_start_finish(struct sbi_scratch *scratch,
 					  u32 hartid);
+int sbi_hsm_hart_change_mmu(struct sbi_scratch *scratch, ulong rmode,
+			 const struct sbi_trap_regs *regs, unsigned long *out_val,
+			 struct sbi_trap_info *out_trap)
 
 #endif

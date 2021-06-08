@@ -2,6 +2,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  *
  * Copyright (c) 2019 Western Digital Corporation or its affiliates.
+ * Copyright (c) 2021 Axel Heider
  *
  * Authors:
  *   Anup Patel <anup.patel@wdc.com>
@@ -63,6 +64,7 @@
 #define SBI_EXT_HSM_HART_STOP			0x1
 #define SBI_EXT_HSM_HART_GET_STATUS		0x2
 #define SBI_EXT_HSM_HART_SUSPEND		0x3
+#define SBI_EXT_HSM_HART_CHANGE_MMU		0x4
 
 #define SBI_HSM_STATE_STARTED			0x0
 #define SBI_HSM_STATE_STOPPED			0x1

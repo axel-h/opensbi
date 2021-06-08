@@ -2,6 +2,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  *
  * Copyright (c) 2020 Western Digital Corporation or its affiliates.
+ * Copyright (c) 2021 Axel Heider
  *
  * Authors:
  *   Atish Patra <atish.patra@wdc.com>
@@ -544,4 +545,23 @@ int sbi_hsm_hart_suspend(struct sbi_scratch *scratch, u32 suspend_type,
 		sbi_hart_hang();
 
 	return ret;
+}
+
+int sbi_hsm_hart_change_mmu(struct sbi_scratch *scratch, ulong prv_mode,
+			 const struct sbi_trap_regs *regs, unsigned long *out_val,
+			 struct sbi_trap_info *out_trap)
+{
+	/* Allow this call from S-mode only. */
+	if (prv_mode != PRV_S) {
+		sbi_printf("%s: ERR: only S-Mode can change the MMU\n", __func__);
+		return SBI_EINVAL;
+	}
+
+	write_csr(satp, regs->a0);
+	write_csr(mepc, regs->a1);
+	/* regs->a2 holds the sp to be used */
+	/* regs->a3 holds a context to be passed on in a0 */
+	*out_val = regs->a3
+
+	return SBI_ENOTSUPP;
 }

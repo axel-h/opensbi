@@ -2,6 +2,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  *
  * Copyright (c) 2020 Western Digital Corporation or its affiliates.
+ * Copyright (c) 2021 Axel Heider
  *
  * Authors:
  *   Atish Patra <atish.patra@wdc.com>
@@ -42,6 +43,9 @@ static int sbi_ecall_hsm_handler(unsigned long extid, unsigned long funcid,
 		/* resume the hart in the same mode as the call origin */
 		ret = sbi_hsm_hart_suspend(scratch, regs->a0, regs->a1,
 					   src_mode, regs->a2);
+		break;
+	case SBI_EXT_HSM_HART_CHANGE_MMU:
+		ret = sbi_hsm_hart_change_mmu(smode, regs, out_val, out_trap);
 		break;
 	default:
 		ret = SBI_ENOTSUPP;
