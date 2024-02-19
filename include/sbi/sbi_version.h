@@ -13,6 +13,8 @@
 #define OPENSBI_VERSION_MAJOR 1
 #define OPENSBI_VERSION_MINOR 4
 
+/* dummy comment */
+
 /**
  * OpenSBI 32-bit version with:
  * 1. upper 16-bits as major number
